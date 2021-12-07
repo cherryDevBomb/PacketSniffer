@@ -48,8 +48,10 @@ public class PacketCaptureService implements Observable {
         try {
             handle.loop(0, (Packet packet) -> {
                 PacketInfo packetInfo = PacketParser.parsePacket(packet.getHeader().getRawData(), packet.getPayload().getRawData());
-                packets.add(packetInfo);
-                observers.forEach(Observer::updateView);
+                if (packetInfo != null) {
+                    packets.add(packetInfo);
+                    observers.forEach(Observer::updateView);
+                }
             });
         } catch (InterruptedException e) {
             log.info("The loop terminated due to a call to breakLoop()");
