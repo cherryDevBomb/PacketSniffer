@@ -11,7 +11,6 @@ import sniffer.util.Observer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 public class PacketCaptureService implements Observable {
@@ -27,18 +26,21 @@ public class PacketCaptureService implements Observable {
     @Getter
     private final List<PacketInfo> packets = new ArrayList<>();
 
-    public void initHandle() {
+    public List<PcapNetworkInterface> findDevices() {
+        setNpcapSystemProperty();
+
+        List<PcapNetworkInterface> devices = null;
         try {
-            Optional<PcapNetworkInterface> deviceOpt = findDevices().stream().filter(d -> d.getDescription().contains("Ethernet Adapter")).findFirst();
-            if (!deviceOpt.isPresent()) {
-                log.error("Ethernet Adapter not found");
-                return;
-            }
-//            PcapNetworkInterface networkInterface = Pcaps.getDevByName(deviceOpt.get().getName());
-            PcapNetworkInterface networkInterface = Pcaps.getDevByName("\\Device\\NPF_{3BBE4475-C0E3-4EBA-8709-B146A9C5F423}"); //W(hy)TF
+            devices = Pcaps.findAllDevs();
+        } catch (PcapNativeException e) {
+            log.error("Failed call to Pcaps.findAllDevs()");
+        }
+        return devices;
+    }
+
+    public void initHandle(PcapNetworkInterface networkInterface) {
+        try {
             handle = networkInterface.openLive(SNAP_LEN, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, TIMEOUT);
-//            BpfProgram bpfProgram = handle.compileFilter(BFP_EXPRESSION, BpfProgram.BpfCompileMode.NONOPTIMIZE, PcapHandle.PCAP_NETMASK_UNKNOWN);
-//            handle.setFilter(bpfProgram);
         } catch (PcapNativeException e) {
             log.error("Error on initHandle()", e);
         }
@@ -68,24 +70,20 @@ public class PacketCaptureService implements Observable {
         }
     }
 
-    private List<PcapNetworkInterface> findDevices() {
-        List<PcapNetworkInterface> devices = null;
-        try {
-            // TODO remove after restart to see if it gets picked up from PATH
-            String prop = System.getProperty("jna.library.path");
-            if (prop == null || prop.isEmpty()) {
-                prop = "C:/Windows/System32/Npcap";
-            } else {
-                prop += ";C:/Windows/System32/Npcap";
-            }
-            System.setProperty("jna.library.path", prop);
-            // end TODO
-
-            devices = Pcaps.findAllDevs();
-        } catch (PcapNativeException e) {
-            log.error("Failed call to Pcaps.findAllDevs()");
+    public void resetHandle() {
+        if (handle != null && handle.isOpen()) {
+            handle.close();
         }
-        return devices;
+        packets.clear();
     }
 
+    private void setNpcapSystemProperty() {
+        String prop = System.getProperty("jna.library.path");
+        if (prop == null || prop.isEmpty()) {
+            prop = "C:/Windows/System32/Npcap";
+        } else {
+            prop += ";C:/Windows/System32/Npcap";
+        }
+        System.setProperty("jna.library.path", prop);
+    }
 }

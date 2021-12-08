@@ -27,4 +27,11 @@ public class ByteUtils {
         }
         return booleanArray;
     }
+
+    public static String byteArrayToIPString(byte[] bytes) {
+        return Bytes.asList(bytes)
+                .stream()
+                .map(b -> Integer.toString(Byte.toUnsignedInt(b)))
+                .collect(Collectors.joining("."));
+    }
 }
