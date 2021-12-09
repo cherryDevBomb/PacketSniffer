@@ -3,6 +3,7 @@ package sniffer.model;
 import javafx.beans.property.SimpleStringProperty;
 import sniffer.model.headers.EthernetHeader;
 import sniffer.model.headers.IpHeader;
+import sniffer.model.headers.TcpHeader;
 import sniffer.util.PacketDetailsBuilder;
 
 public class PacketInfo {
@@ -16,6 +17,7 @@ public class PacketInfo {
 
     private EthernetHeader ethernetHeader;
     private IpHeader ipHeader;
+    private TcpHeader tcpHeader;
 
     public String getPacketDetails() {
         if (packetDetails == null) {
@@ -86,5 +88,13 @@ public class PacketInfo {
 
     public void setIpHeader(IpHeader ipHeader) {
         this.ipHeader = ipHeader;
+    }
+
+    public TcpHeader getTcpHeader() {
+        return tcpHeader;
+    }
+
+    public void setTcpHeader(TcpHeader tcpHeader) {
+        this.tcpHeader = tcpHeader;
     }
 }

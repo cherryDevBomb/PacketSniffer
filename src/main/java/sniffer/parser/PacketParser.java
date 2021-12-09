@@ -1,11 +1,10 @@
 package sniffer.parser;
 
 import sniffer.model.PacketInfo;
-import sniffer.model.headers.EthernetHeader;
-import sniffer.model.headers.EthernetHeaderType;
-import sniffer.model.headers.IpHeader;
-import sniffer.model.headers.IpProtocolType;
+import sniffer.model.headers.*;
 import sniffer.util.ByteUtils;
+
+import java.util.Arrays;
 
 public class PacketParser {
 
@@ -22,14 +21,17 @@ public class PacketParser {
             return null;
         }
 
-        //TODO start parsing TCP header from payload[ipHeader.ipHeaderLength:]
-
-        packetInfo.setSourceIP(ByteUtils.byteArrayToIPString(ipHeader.getSourceAddress()));
-        packetInfo.setDestinationIP(ByteUtils.byteArrayToIPString(ipHeader.getDestinationAddress()));
+        TcpHeader tcpHeader = TcpHeader.parse(Arrays.copyOfRange(payload, ipHeader.getIpHeaderLength(), payload.length));
 
         packetInfo.setEthernetHeader(ethernetHeader);
         packetInfo.setIpHeader(ipHeader);
+        packetInfo.setTcpHeader(tcpHeader);
 
+        packetInfo.setSourceIP(ByteUtils.byteArrayToIPString(ipHeader.getSourceAddress()));
+        packetInfo.setDestinationIP(ByteUtils.byteArrayToIPString(ipHeader.getDestinationAddress()));
+        packetInfo.setProtocol(ipHeader.getProtocol().toString());
+        packetInfo.setLength(String.valueOf(header.length + ipHeader.getTotalLength()));
+        
         return packetInfo;
     }
 }
