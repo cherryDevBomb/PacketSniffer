@@ -21,7 +21,7 @@ public class PacketParser {
             return null;
         }
 
-        TcpHeader tcpHeader = TcpHeader.parse(Arrays.copyOfRange(payload, ipHeader.getIpHeaderLength(), payload.length));
+        TcpHeader tcpHeader = TcpHeader.parse(Arrays.copyOfRange(payload, ipHeader.getIpHeaderLength() * 4, payload.length));
 
         packetInfo.setEthernetHeader(ethernetHeader);
         packetInfo.setIpHeader(ipHeader);
@@ -31,7 +31,7 @@ public class PacketParser {
         packetInfo.setDestinationIP(ByteUtils.byteArrayToIPString(ipHeader.getDestinationAddress()));
         packetInfo.setProtocol(ipHeader.getProtocol().toString());
         packetInfo.setLength(String.valueOf(header.length + ipHeader.getTotalLength()));
-        
+
         return packetInfo;
     }
 }

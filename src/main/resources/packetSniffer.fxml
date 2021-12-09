@@ -23,6 +23,16 @@
                     <PropertyValueFactory property="destinationIP"/>
                 </cellValueFactory>
             </TableColumn>
+            <TableColumn text="Protocol" prefWidth="70">
+                <cellValueFactory>
+                    <PropertyValueFactory property="protocol"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Length" prefWidth="70">
+                <cellValueFactory>
+                    <PropertyValueFactory property="length"/>
+                </cellValueFactory>
+            </TableColumn>
         </columns>
     </TableView>
 
