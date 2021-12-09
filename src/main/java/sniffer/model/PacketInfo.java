@@ -1,22 +1,28 @@
 package sniffer.model;
 
 import javafx.beans.property.SimpleStringProperty;
-import lombok.Getter;
-import lombok.Setter;
 import sniffer.model.headers.EthernetHeader;
 import sniffer.model.headers.IpHeader;
+import sniffer.util.PacketDetailsBuilder;
 
 public class PacketInfo {
 
     private final SimpleStringProperty sourceIP = new SimpleStringProperty("");
     private final SimpleStringProperty destinationIP = new SimpleStringProperty("");
+    private final SimpleStringProperty protocol = new SimpleStringProperty("");
+    private final SimpleStringProperty length = new SimpleStringProperty("");
 
-    @Getter
-    @Setter
+    private String packetDetails;
+
     private EthernetHeader ethernetHeader;
-    @Getter
-    @Setter
     private IpHeader ipHeader;
+
+    public String getPacketDetails() {
+        if (packetDetails == null) {
+            packetDetails = PacketDetailsBuilder.getPacketDetailsString(this);
+        }
+        return packetDetails;
+    }
 
     public String getSourceIP() {
         return sourceIP.get();
@@ -40,5 +46,45 @@ public class PacketInfo {
 
     public void setDestinationIP(String destinationIP) {
         this.destinationIP.set(destinationIP);
+    }
+
+    public String getProtocol() {
+        return protocol.get();
+    }
+
+    public SimpleStringProperty protocolProperty() {
+        return protocol;
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol.set(protocol);
+    }
+
+    public String getLength() {
+        return length.get();
+    }
+
+    public SimpleStringProperty lengthProperty() {
+        return length;
+    }
+
+    public void setLength(String length) {
+        this.length.set(length);
+    }
+
+    public EthernetHeader getEthernetHeader() {
+        return ethernetHeader;
+    }
+
+    public void setEthernetHeader(EthernetHeader ethernetHeader) {
+        this.ethernetHeader = ethernetHeader;
+    }
+
+    public IpHeader getIpHeader() {
+        return ipHeader;
+    }
+
+    public void setIpHeader(IpHeader ipHeader) {
+        this.ipHeader = ipHeader;
     }
 }

@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.pcap4j.core.PcapNetworkInterface;
@@ -40,7 +41,15 @@ public class Controller implements Observer {
     private void initialize() {
         pCapService.registerObserver(this);
         initComboBox();
-        Platform.runLater(() -> tableView.setItems(FXCollections.observableArrayList(pCapService.getPackets())));
+        packetDetailsArea.setFont(Font.font("monospace"));
+        Platform.runLater(() -> {
+            tableView.setItems(FXCollections.observableArrayList(pCapService.getPackets()));
+            tableView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    packetDetailsArea.setText(newSelection.getPacketDetails());
+                }
+            });
+        });
     }
 
     @FXML

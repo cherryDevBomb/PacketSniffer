@@ -1,5 +1,7 @@
 package sniffer.model.headers;
 
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -15,6 +17,7 @@ public enum EthernetHeaderType {
         LOOKUP_MAP = Arrays.stream(values()).collect(Collectors.toMap(val -> val.value, val -> val));
     }
 
+    @Getter
     private final short value;
 
     EthernetHeaderType(short value) {

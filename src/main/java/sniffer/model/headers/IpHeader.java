@@ -18,8 +18,8 @@ public class IpHeader {
     private boolean reservedBit;
     private boolean dontFragment;
     private boolean moreFragment;
-    private byte fragmentOffset;
-    private byte ttl;
+    private short fragmentOffset;
+    private int ttl;
     private IpProtocolType protocol;
     private short checksum;
     private byte[] sourceAddress;
@@ -35,8 +35,8 @@ public class IpHeader {
                 .reservedBit((bytes[6] >> 7 & 1) == 1)
                 .dontFragment((bytes[6] >> 6 & 1) == 1)
                 .moreFragment((bytes[6] >> 5 & 1) == 1)
-                .fragmentOffset((byte) (bytes[7] & 0b00011111))
-                .ttl(bytes[8])
+                .fragmentOffset((byte) (ByteBuffer.wrap(Arrays.copyOfRange(bytes, 6, 8)).getShort() & 0x1FFF))
+                .ttl(Byte.toUnsignedInt(bytes[8]))
                 .protocol(IpProtocolType.getType(bytes[9]))
                 .checksum(ByteBuffer.wrap(Arrays.copyOfRange(bytes, 10, 12)).getShort())
                 .sourceAddress(Arrays.copyOfRange(bytes, 12, 16))
