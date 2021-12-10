@@ -55,7 +55,7 @@ public class Controller implements Observer {
     @FXML
     public void startClicked(Event e) {
         log.debug("Start clicked");
-        executorService = Executors.newSingleThreadExecutor(); //TODO consider moving initialization to declaration and making executor final
+        executorService = Executors.newSingleThreadExecutor();
         executorService.execute(pCapService::capture);
         startBtn.setDisable(true);
         stopBtn.setDisable(false);

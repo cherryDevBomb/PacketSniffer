@@ -21,6 +21,7 @@ public class PacketParser {
             return null;
         }
 
+        // ipHeader length is measured in 32-bit words -> multiply by 4 to get length in bytes
         TcpHeader tcpHeader = TcpHeader.parse(Arrays.copyOfRange(payload, ipHeader.getIpHeaderLength() * 4, payload.length));
 
         packetInfo.setEthernetHeader(ethernetHeader);

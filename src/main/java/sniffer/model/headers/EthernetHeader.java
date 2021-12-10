@@ -10,9 +10,9 @@ import java.util.Arrays;
 @Builder
 public class EthernetHeader {
 
-    private byte[] dest;
-    private byte[] src;
-    private EthernetHeaderType type;
+    private byte[] dest;                //48 bits
+    private byte[] src;                 //48 bits
+    private EthernetHeaderType type;    //16 bits
 
     public static EthernetHeader parse(byte[] bytes) {
         return EthernetHeader.builder()
