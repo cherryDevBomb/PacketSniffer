@@ -68,7 +68,8 @@ public class PacketDetailsBuilder {
                 .append(String.format("\t\t.... .... ...%s = Fin\n", tcpHeader.isFin() ? "1" : "0"))
                 .append(String.format("\tWindow: %d\n", tcpHeader.getWindow()))
                 .append(String.format("\tChecksum: %s\n", tcpChecksumHex))
-                .append(String.format("\tUrgent Pointer: %d\n", tcpHeader.getUrgentPointer()));
+                .append(String.format("\tUrgent Pointer: %d\n", tcpHeader.getUrgentPointer()))
+                .append((packetInfo.getHttpPayload()) != null ? String.format("HTTP payload:\n %s\n", packetInfo.getHttpPayload()) : "");
 
         return stringBuilder.toString();
     }

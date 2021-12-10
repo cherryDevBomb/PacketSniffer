@@ -19,6 +19,8 @@ public class PacketInfo {
     private IpHeader ipHeader;
     private TcpHeader tcpHeader;
 
+    private String httpPayload;
+
     public String getPacketDetails() {
         if (packetDetails == null) {
             packetDetails = PacketDetailsBuilder.getPacketDetailsString(this);
@@ -96,5 +98,13 @@ public class PacketInfo {
 
     public void setTcpHeader(TcpHeader tcpHeader) {
         this.tcpHeader = tcpHeader;
+    }
+
+    public String getHttpPayload() {
+        return httpPayload;
+    }
+
+    public void setHttpPayload(String httpPayload) {
+        this.httpPayload = httpPayload;
     }
 }
